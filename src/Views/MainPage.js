@@ -7,7 +7,8 @@ import {
   View,
   ScrollView,
   Dimensions,
-  TouchableHighlight
+  TouchableHighlight,
+  AsyncStorage
 } from 'react-native';
 
 import Edit from './AddTeamMember';
@@ -15,7 +16,7 @@ import ListPage from './ListPage.js';
 import Events from '../utils/events';
 import Store from '../utils/store';
 
-
+var data = '';
 var {height, width} = Dimensions.get('window');
 export default class MainPage extends Component{
 	constructor(){
@@ -24,12 +25,27 @@ export default class MainPage extends Component{
 			membername : {},
 			page:'page',
 			editPage:{},
-			index:0
+			index:0,
+      data:''
 		}
 		console.disableYellowBox = true
 	}
 
-	componentDidMount(){
+	componentWillMount(){
+    var that = this
+     data = AsyncStorage.getItem('data', (err, result) => {
+                if(result){
+                  var value = JSON.parse(result)
+                    Store.storeDat(value)
+                    that.setState({data:value})
+
+                     // setTimeout(()=> that.setState({data:JSON.parse(result)})
+                // , 500)
+                }
+                else{
+
+                }
+        });
 		var that = this
     Store.addListener('edit', (object, index)=>that.editPage('edit', object, index))
     Store.addListener('close', (object, index)=>that.editPage('page'))
@@ -48,7 +64,7 @@ export default class MainPage extends Component{
 		var Page ;
 		var that = this
 		if(this.state.page == 'page')
-			Page = <ListPage />
+			Page = <ListPage data={this.state.data}/>
 
 		else if(this.state.page == 'edit')
 			Page = <Edit data={that.state.editData} index={that.state.index}/>

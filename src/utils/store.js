@@ -1,7 +1,12 @@
 var Dispatcher = require('./dispatcher')
 var Events = require('./events')
+import Actions from './actions'
 
-var dataDummy = [
+import {
+  AsyncStorage
+} from 'react-native';
+
+var DummyData = [
 
     {
       'name':'uuu',
@@ -48,12 +53,15 @@ var dataDummy = [
     },
     
 ]
+var returnData;
+
 
 class Store {
-	test(){
-
-	}
-
+  constructor(){
+    this.state={
+      data:DummyData
+    }
+  }
 	addListener(event, callBack){
 		Events.on(event, callBack)
 	}
@@ -70,21 +78,34 @@ class Store {
 		this.emitEvent(next, item, index)
 	}
   getdata(){
-  
-  return dataDummy
-}
+    if(returnData){
+      DummyData = returnData
+      return returnData
 
-setData(object, index, replace="newone"){
-  if(Object.keys(object).length){
-    if(replace == 'replace'){
-      dataDummy[index] = object
     }
     else
-      dataDummy.push(object)
+      return DummyData
+}
+storeDat(data){
+  returnData = data
+}
+setData(object, index, replace="newone"){
+  var that = this
+  if(Object.keys(object).length){
+    if(replace == 'replace'){
+      DummyData[index] = object
+    }
+    else
+      DummyData.push(object)
   }
   else
-    dataDummy.splice(index, 1); 
+    DummyData.splice(index, 1); 
+  var t = JSON.stringify(DummyData)
+returnData = DummyData
+AsyncStorage.setItem('data', t, ()=> {
 
+  setTimeout(()=>Actions.changeUrl({type:'saved',item:{}, index:0}), 400)
+                    })
 }
 }
 
@@ -92,12 +113,13 @@ module.exports = new Store()
  var SStore = new Store()
 
 Dispatcher.register (function (action) {
-	// alert(89)
+        // AsyncStorage.setItem('data', gtdata, ()=> {
+        //             })
+        
         switch (action.actionType) {
             case 'close':
             {
-              //authentication
-              // alert(99)
+              
               SStore.page('close');
               break;
             }

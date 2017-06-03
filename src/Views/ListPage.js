@@ -14,7 +14,6 @@ import {
 import Actions from '../utils/actions';
 import Store from '../utils/store'
 
-var data = [1,2,3,4,5,6,7,8,9]
 var {height, width} = Dimensions.get('window');
 export default class ListPage extends Component{
 	constructor(){
@@ -24,26 +23,29 @@ export default class ListPage extends Component{
 			membername : {},
 			page:'page'
 		}
+		// this.state.data
 		console.disableYellowBox = true
 	}
 	
 	componentDidMount(){
 	}
+	// componentWillReceiveProps(nextProps){
+	// 	console.log(nextProps)
+	// 	this.state.data = nextProps.data
+	// }
 	_onPressButton(){
-		// Events.emit('newContact')
 		Actions.changeUrl({type:'newContact',item:{}, index:0})
-
-
 	}
+
 	editPage(a, item, index){
 		var obj = {type:a, item:item, index:index}
 		Actions.changeUrl(obj)
-		// Events.emit(a, item, index)
-		// this.setState({page: 'edit'})
 	}
+
 	render(){
 		data = Store.getdata()
-		
+		if(!Array.isArray(this.props.data))
+			return null
 		var that = this
 		return(
 			<View style={styles.mainContainer}>
@@ -95,7 +97,7 @@ export default class ListPage extends Component{
 		         				 					<View style={{flex:1,}}>
 		         				 						<View style={{flex:1, flexDirection:'column'}}>
 		         				 							<View style={{flex:0.3 }}>
-		         				 								<Text style={{fontColor:'#000000'}}> {item['name'] } {adminText}</Text>
+		         				 								<Text style={{fontColor:'#000000'}}> {item['name'] } {item['lastName']}{adminText}</Text>
 		         				 							</View>
 		         				 							<View style={{flex:0.3, }}>
 		         				 								<Text>{item['location']}</Text>

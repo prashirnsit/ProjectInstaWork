@@ -41,7 +41,6 @@ export default class AddTeamMember extends Component{
 		console.disableYellowBox = true
 	}
 	_onPressButton(){
-		// Events.emit('close')
 		Actions.changeUrl({type:'close',item:{}, index:0})
 
 	}
@@ -84,23 +83,24 @@ export default class AddTeamMember extends Component{
 		}
 		var object={}
 		if(type == 'save'){
-		object['name'] = this.state.data['name']
-		object['email'] = this.state.data['email']
-		object['lastName'] = this.state.data['lastName']
-		object['location'] =  this.state.data['location']
-		if(this.state.admin)
-			object['admin'] = 'yes'
-		else
-			object['admin'] = 'no'
+			object['name'] = this.state.data['name']
+			object['email'] = this.state.data['email']
+			object['lastName'] = this.state.data['lastName']
+			object['location'] =  this.state.data['location']
+			if(this.state.admin)
+				object['admin'] = 'yes'
+			else
+				object['admin'] = 'no'
 
-	if(this.props.data){
-		Store.setData(object, this.props.index, 'replace')}
-	else{
-		Store.setData(object)
-	}
+			if(this.props.data){
+				Store.setData(object, this.props.index, 'replace')}
+			else{
+				Store.setData(object)
+			}
 		
 	}
 	else{
+		object={}
 		if(this.state.admin){
 			Store.setData(object, this.props.index)
 		}
@@ -110,9 +110,6 @@ export default class AddTeamMember extends Component{
 			return
 		}
 	}
-	// Events.emit('saved')
-	Actions.changeUrl({type:'saved',item:{}, index:0})
-
 
 	}
 	_oncandelete(){
@@ -123,7 +120,6 @@ export default class AddTeamMember extends Component{
 	}
 
 	_oncannotdelete(){
-		// alert(this.state.admin)
 		this.state.changed = true
 
 		this.state.admin = false
