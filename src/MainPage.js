@@ -39,7 +39,6 @@ export default class MainPage extends Component{
 	}
 
 	_onPressButton(){
-		alert(90)
 	}
 	editPage(a, object, index){
 		this.state.index = index
@@ -56,7 +55,6 @@ export default class MainPage extends Component{
 			Page = <Edit data={that.state.editData} index={that.state.index}/>
 
 		else if(this.state.page == 'newContact'){
-			alert(90)
 			Page = <Edit />
 		}
 		return(
