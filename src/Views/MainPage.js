@@ -12,9 +12,10 @@ import {
 
 import Edit from './AddTeamMember';
 import ListPage from './ListPage.js';
-import Events from './events'
+import Events from '../utils/events';
+import Store from '../utils/store';
 
-var data = [1,2,3,4,5,6,7,8,9]
+
 var {height, width} = Dimensions.get('window');
 export default class MainPage extends Component{
 	constructor(){
@@ -30,12 +31,10 @@ export default class MainPage extends Component{
 
 	componentDidMount(){
 		var that = this
-		Events.on('edit', (object, index)=>that.editPage('edit', object, index))
-		Events.on('close', ()=>that.editPage('page'))
-		Events.on('newContact', ()=>that.editPage('newContact'))
-		Events.on('saved', ()=>that.editPage('page'))
-
-
+    Store.addListener('edit', (object, index)=>that.editPage('edit', object, index))
+    Store.addListener('close', (object, index)=>that.editPage('page'))
+    Store.addListener('newContact', (object, index)=>that.editPage('newContact'))
+    Store.addListener('saved', (object, index)=>that.editPage('page'))
 	}
 
 	_onPressButton(){

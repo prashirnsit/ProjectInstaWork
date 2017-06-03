@@ -11,8 +11,8 @@ import {
   Image
 } from 'react-native';
 
-import Events from './events'
-import Store from './store'
+import Actions from '../utils/actions';
+import Store from '../utils/store'
 
 var data = [1,2,3,4,5,6,7,8,9]
 var {height, width} = Dimensions.get('window');
@@ -30,11 +30,15 @@ export default class ListPage extends Component{
 	componentDidMount(){
 	}
 	_onPressButton(){
-		Events.emit('newContact')
+		// Events.emit('newContact')
+		Actions.changeUrl({type:'newContact',item:{}, index:0})
+
 
 	}
 	editPage(a, item, index){
-		Events.emit(a, item, index)
+		var obj = {type:a, item:item, index:index}
+		Actions.changeUrl(obj)
+		// Events.emit(a, item, index)
 		// this.setState({page: 'edit'})
 	}
 	render(){
@@ -84,7 +88,7 @@ export default class ListPage extends Component{
 	         				 					<View style={{flex:0.33, alignItems:'center', justifyContent:'center'}}>
 	         				 					<Image
 										          style={{width: 50, height: 50, marginLeft:0}}
-										         source={require('../images/man.png')}
+										         source={require('../../images/man.png')}
 										        />
 	         				 					</View>
 	         				 					<TouchableHighlight underlayColor="transparent" style={{flex:0.66}} onPress={()=>that.editPage('edit', item, index)}>

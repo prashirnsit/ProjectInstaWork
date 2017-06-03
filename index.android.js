@@ -12,9 +12,8 @@ import {
   View
 } from 'react-native';
 
-import ListPage from './src/ListPage.js';
-import AddTeamMembers from './src/AddTeamMember.js';
-import MainPage from './src/MainPage.js';
+
+import MainPage from './src/Views/MainPage.js';
 
 
 export default class InstaworkTest extends Component {

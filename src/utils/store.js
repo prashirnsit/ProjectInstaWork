@@ -1,16 +1,6 @@
+var Dispatcher = require('./dispatcher')
 var Events = require('./events')
 
-import React, { Component } from 'react';
-import {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  Dimensions,
-  TouchableHighlight,
-  AsyncStorage
-} from 'react-native';
 var dataDummy = [
 
     {
@@ -61,11 +51,25 @@ var dataDummy = [
 
 class Store {
 	test(){
-   
+
 	}
 
+	addListener(event, callBack){
+		Events.on(event, callBack)
+	}
 
-getdata(){
+	removeEventListener(event){
+		Events.removeListener(event)
+	}
+
+	emitEvent(next, item, index){
+		Events.emit(next, item, index)
+	}
+
+	page(next, item, index){
+		this.emitEvent(next, item, index)
+	}
+  getdata(){
   
   return dataDummy
 }
@@ -82,23 +86,44 @@ setData(object, index, replace="newone"){
     dataDummy.splice(index, 1); 
 
 }
-
-	addListener(event, callBack){
-		Events.on(event, callBack)
-	}
-
-	removeEventListener(event){
-		Events.removeListener(event)
-	}
-
-	emitEvent(next){
-		Events.emit(next)
-	}
-
-	login(next){
-		this.emitEvent(next)
-	}
 }
 
 module.exports = new Store()
- 
+ var SStore = new Store()
+
+Dispatcher.register (function (action) {
+	// alert(89)
+        switch (action.actionType) {
+            case 'close':
+            {
+              //authentication
+              // alert(99)
+              SStore.page('close');
+              break;
+            }
+            case 'edit':
+            {
+              SStore.page('edit', action.item, action.index);
+              
+              break;
+            }
+            case 'newContact':
+            {
+
+              SStore.page('newContact');
+              
+              break;
+            }
+            case 'saved':
+            {
+
+              SStore.page('close');
+              
+              break;
+            }
+            default:
+            {
+                return true;
+            }
+        }
+    });

@@ -12,10 +12,8 @@ import {
 } from 'react-native';
 import Navbar from './Navbar';
 import TitleBar from './TitleBar';
-import Events from './events';
-import Store from './store'
-
-
+import Store from '../utils/store'
+import Actions from '../utils/actions'
 
 var data = [1,2,3,4,5,6,7,8,9]
 var {height, width} = Dimensions.get('window');
@@ -43,7 +41,9 @@ export default class AddTeamMember extends Component{
 		console.disableYellowBox = true
 	}
 	_onPressButton(){
-		Events.emit('close')
+		// Events.emit('close')
+		Actions.changeUrl({type:'close',item:{}, index:0})
+
 	}
 
 	componentWillMount(){
@@ -110,7 +110,9 @@ export default class AddTeamMember extends Component{
 			return
 		}
 	}
-	Events.emit('saved')
+	// Events.emit('saved')
+	Actions.changeUrl({type:'saved',item:{}, index:0})
+
 
 	}
 	_oncandelete(){
