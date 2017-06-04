@@ -13,9 +13,9 @@ import {
 import Navbar from './Navbar';
 import TitleBar from './TitleBar';
 import Store from '../utils/store'
-import Actions from '../utils/actions'
+import Actions from '../utils/actions';
+import InputField, {InputFieldRadio} from './inputFields'
 
-var data = [1,2,3,4,5,6,7,8,9]
 var {height, width} = Dimensions.get('window');
 export default class AddTeamMember extends Component{
 	constructor(props){
@@ -54,34 +54,36 @@ export default class AddTeamMember extends Component{
 		}
 	}
 	updateName(data){
-		this.state.name = data
-		this.setState({})
+		this.setState({name: data})
 	}
 
 	updateEmail(data){
-		this.state.email = data
-		this.setState({})
+		this.setState({email: data})
 	}
 
 	updateLastName(data){
-		this.state.lastName = data
-		this.setState({})
-
+		this.setState({lastName: data})
 	}
 
 	updateLastLocation(data){
-		this.state.location = data
-
-		this.setState({})
+		this.setState({location: data})
 
 	}
-
+validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+}
 	save(type){
 		if((!this.state.data['name'] || !this.state.data['email']  || !this.state.data['location']) && type =='save'){
 			alert('enter the fields')
 			return
 		}
 		var object={}
+		if(!this.validateEmail(this.state.data['email'])){
+			alert('not a valid emmail')
+			return
+		}
+
 		if(type == 'save'){
 			object['name'] = this.state.data['name']
 			object['email'] = this.state.data['email']
@@ -113,23 +115,16 @@ export default class AddTeamMember extends Component{
 
 	}
 	_oncandelete(){
-		this.state.admin = true
-
-		this.setState({})
+		this.setState({admin: true})
 
 	}
 
 	_oncannotdelete(){
-		this.state.changed = true
-
-		this.state.admin = false
-
-		this.setState({})
-
+		this.setState({admin: false})
 	}
+
 	render(){
 		var that = this
-		
 		if(this.props.data){
 			var teamMember = "Edit a Team Member"
 			var subTitle = "Edit email, location and role"
@@ -144,7 +139,6 @@ export default class AddTeamMember extends Component{
 		this.state.data['lastName'] = this.state.lastName
 		this.state.data['email'] = this.state.email
 		this.state.data['location'] = this.state.location
-		
 		return(
 			<View style={styles.mainContainer}>
 				
@@ -168,81 +162,22 @@ export default class AddTeamMember extends Component{
 	         				 			<Text> Info</Text>
 	         				 				
 	         				 			</View>
-	         				 			<View style={styles.border}>
-	         				 				<TextInput
-	         				 				underlineColorAndroid="transparent"
-									        editable = {true}
-									        placeholder="First Name"
-									        onChange={(event) => that.updateName(event.nativeEvent.text)}
-									        value={that.state.data.name}
-									      />
-	         				 			</View>
-	         				 			<View style={styles.border}>
-	         				 				<TextInput
-	         				 				underlineColorAndroid="transparent"
-	         				 				placeholder="Last Name"
-									         onChange={(event) => that.updateLastName(event.nativeEvent.text)}
-									        editable = {true}
-									        value={that.state.data.lastName}
-
-									        maxLength = {40}
-									      />
-	         				 			</View>
-	         				 			<View style={styles.border}>
-	         				 				<TextInput
-	         				 				underlineColorAndroid="transparent"
-	         				 				placeholder="Location"
-									         onChange={(event) => that.updateLastLocation(event.nativeEvent.text)}
-									        editable = {true}
-									        value={that.state.data.location}
-
-									        maxLength = {40}
-									      />
-	         				 			</View>
-	         				 			<View style={styles.border}>
-	         				 				<TextInput
-	         				 				underlineColorAndroid="transparent"
-	         				 				placeholder="email"
-									         onChange={(event) => that.updateEmail(event.nativeEvent.text)}
-									        editable = {true}
-									        value={that.state.data.email}
-
-									        maxLength = {40}
-									      />
-	         				 			</View>
-
-	         				
+	         				 			<InputField placeholder="Name" onChange={(event)=>that.updateName(event)} value={that.state.name} refer="name"/>
+	         				 			<InputField placeholder="Last Name" onChange={(event)=>that.updateLastName(event)} value={that.state.lastName} refer="lastname"/>
+	         				 			<InputField placeholder="Location" onChange={(event)=>that.updateLastLocation(event)} value={that.state.location} refer="location"/>
+	         				 			<InputField placeholder="email" onChange={(event)=>that.updateEmail(event)} value={that.state.email} refer="email"/>
 	         				 		</View>
 	         				 		<View style={{marginTop:20}}>
 	         				 			<Text style={{fontSize:20}}>Role</Text>
 	         				 		</View>
-	         				 		<View style={{marginTop:15, fontColor:'balck', flexDirection:'row', flex:1}}>
-	         				 			<View style={{flex:0.7}}>
-	         				 				<Text>Regular - cant delete members</Text>
-	         				 			</View>
-	         				 			<View style={{flex:0.3, }}>
-	         				 				<TouchableHighlight style={styles.radio} underlayColor='transparent' onPress={()=>this._oncannotdelete()}>
-												<View style={!that.state.admin? styles.innerRadio:{borderColor:'green'}}>
 
-												</View>
-					    					</TouchableHighlight>
-	         				 			</View>
-	         				 		</View>
-	         				 			<View style={styles.horizontalLine}></View>
+	         				 		<InputFieldRadio textValue="Regular - cannot delete members" onPressFunction={()=>this._oncannotdelete()} admin={!this.state.admin} />
 
-	         				 		<View style={{marginTop:15, flexDirection:'row', flex:1}} >
-	         				 			<View style={{flex:0.7}}>
-	         				 				<Text>Admin - can delete members</Text>
-	         				 			</View>
-	         				 			<View style={{flex:0.3, }}>
-	         				 				<TouchableHighlight style={styles.radio} underlayColor='transparent' onPress={()=>this._oncandelete()}>
-												<View style={that.state.admin? styles.innerRadio:{borderColor:'green'}}>
+	         				 		<View style={styles.horizontalLine}></View>
 
-												</View>
-					    					</TouchableHighlight>
-	         				 			</View>
-	         				 		</View>
-	         				 			<View style={styles.horizontalLine}></View>
+	         				 		<InputFieldRadio textValue="Admin - can delete members" onPressFunction={()=>this._oncandelete()} admin={this.state.admin} />
+
+	         				 		<View style={styles.horizontalLine}></View>
 
 	         				 		<View style={{marginTop:20, flexDirection:'row', flex:1}} >
 	         				 			<View style={{flex:0.5, alignItems:'center',justifyContent:'center'}}>

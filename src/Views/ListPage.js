@@ -8,11 +8,14 @@ import {
   ScrollView,
   Dimensions,
   TouchableHighlight,
-  Image
+  Image,
+  AsyncStorage
 } from 'react-native';
 
 import Actions from '../utils/actions';
-import Store from '../utils/store'
+import Store from '../utils/store';
+import TitleBar from './TitleBar';
+
 
 var {height, width} = Dimensions.get('window');
 export default class ListPage extends Component{
@@ -28,11 +31,8 @@ export default class ListPage extends Component{
 	}
 	
 	componentDidMount(){
+		// Store.setTrueValue()
 	}
-	// componentWillReceiveProps(nextProps){
-	// 	console.log(nextProps)
-	// 	this.state.data = nextProps.data
-	// }
 	_onPressButton(){
 		Actions.changeUrl({type:'newContact',item:{}, index:0})
 	}
@@ -43,10 +43,13 @@ export default class ListPage extends Component{
 	}
 
 	render(){
+		var teamMember = "Team Members"
 		data = Store.getdata()
-		if(!Array.isArray(this.props.data))
+		if(!Array.isArray(this.props.data) )
 			return null
 		var that = this
+		var subTitle = "You have " + data.length +" team memeberse"
+
 		return(
 			<View style={styles.mainContainer}>
 				
@@ -61,15 +64,7 @@ export default class ListPage extends Component{
 							<Text style={{fontSize:30}}>+</Text>
 					    </TouchableHighlight>
 						</View>
-						<View style={{flex:0.8,}}>
-							<View style={{flex:0.6, marginLeft:10,backgroundColor:'white',justifyContent:'center'}}>
-								<Text style={{fontSize:30, fontColor:'black'}}>Team Members</Text>
-								<Text style={{marginTop:5}}>You have {data.length} team memebers</Text>
-							</View>
-							<View style={{flex:0.2}}>
-								<View stye={styles.horizontalLine, {flex:0.3}}></View>
-							</View>
-						</View>
+						<TitleBar teamMember={teamMember} subTitle={subTitle}/>
 					</View>
 					<View style={{flex:0.7}}>
 

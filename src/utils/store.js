@@ -7,54 +7,52 @@ import {
 } from 'react-native';
 
 var DummyData = [
-
     {
-      'name':'uuu',
-      'lastName':'',
-      'location': 'Jan 10 2017',
-      'email':'pdowjpihpdwhgd',
+      'name':'Sachin',
+      'lastName':'Tendulkar',
+      'location': '29 45',
+      'email':'sachin@daf.com',
       'admin':'yes'
     },
     {
-      'name':'alexander',
-      'lastName':'',
-      'location': 'Jan 10 2017',
-      'email':'pdowjpihpdwhgd',
+      'name':'mario',
+      'lastName':'lopez',
+      'location': '66 56',
+      'email':'sachin@daf.com',
       'admin':'no'
     },
     
     {
-      'name':'alexander',
-      'lastName':'',
-      'location': 'Jan 10 2017',
-      'email':'pdowjpihpdwhgd',
+      'name':'Hugh',
+      'lastName':'JackMan',
+      'location': '168 456',
+      'email':'sachin@daf.com',
+      'admin':'yes'
+    },
+    {
+      'name':'Virender',
+      'lastName':'sehwag',
+      'location': '66 45',
+      'email':'sehwag@daf.com',
       'admin':'yes'
     },
     {
       'name':'alexander',
       'lastName':'',
-      'location': 'Jan 10 2017',
-      'email':'pdowjpihpdwhgd',
-      'admin':'yes'
-    },
-    {
-      'name':'alexander',
-      'lastName':'',
-      'location': 'Jan 10 2017',
-      'email':'pdowjpihpdwhgd',
+      'location': '35 45',
+      'email':'alexander@daf.com',
       'admin':'yes'
     },
    {
       'name':'alexander',
       'lastName':'',
-      'location': 'Jan 10 2017',
-      'email':'pdowjpihpdwhgd',
+      'location': '68.99 45',
+      'email':'sachin@daf.com',
       'admin':'yes'
     },
-    
 ]
 var returnData;
-
+var trueValue = false
 
 class Store {
   constructor(){
@@ -86,10 +84,44 @@ class Store {
     else
       return DummyData
 }
+
+getTrueValue(){
+  return trueValue;
+}
+async _addTask () {
+
+  var t = JSON.stringify(DummyData)
+    returnData = DummyData
+    await AsyncStorage.setItem('data', t,()=>{
+  Actions.changeUrl({type:'saved',item:{}, index:0})
+
+    })
+
+  }
+
 storeDat(data){
   returnData = data
 }
 setData(object, index, replace="newone"){
+  var that = this
+  if(Object.keys(object).length){
+    if(replace == 'replace'){
+      DummyData[index] = object
+    }
+    else
+      DummyData.push(object)
+  }
+  else
+    DummyData.splice(index, 1); 
+    
+
+  this._addTask()
+
+}
+storeDat1(data){
+  returnData = data
+}
+setData1(object, index, replace="newone"){
   var that = this
   if(Object.keys(object).length){
     if(replace == 'replace'){

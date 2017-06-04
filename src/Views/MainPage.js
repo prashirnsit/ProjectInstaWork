@@ -30,23 +30,22 @@ export default class MainPage extends Component{
 		}
 		console.disableYellowBox = true
 	}
-
-	componentWillMount(){
+ async _updateList () { 
+      let response = await AsyncStorage.getItem('data');
+      data = await JSON.parse(response) || [];
+      if(data.length == 0)
+        data = Store.getdata()
+      Store.storeDat(data)
+      this.setState({data:data})
+      
+  } 
+	async componentWillMount(){
     var that = this
-     data = AsyncStorage.getItem('data', (err, result) => {
-                if(result){
-                  var value = JSON.parse(result)
-                    Store.storeDat(value)
-                    that.setState({data:value})
 
-                     // setTimeout(()=> that.setState({data:JSON.parse(result)})
-                // , 500)
-                }
-                else{
+   
 
-                }
-        });
-		var that = this
+  that._updateList()
+
     Store.addListener('edit', (object, index)=>that.editPage('edit', object, index))
     Store.addListener('close', (object, index)=>that.editPage('page'))
     Store.addListener('newContact', (object, index)=>that.editPage('newContact'))
@@ -55,10 +54,10 @@ export default class MainPage extends Component{
 
 	_onPressButton(){
 	}
-	editPage(a, object, index){
+	editPage(type, object, index){
 		this.state.index = index
 		this.state.editData = object
-		this.setState({page: a})
+		this.setState({page: type})
 	}
 	render(){
 		var Page ;
